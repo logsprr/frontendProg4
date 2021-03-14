@@ -1,20 +1,25 @@
 import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useHistory, useLocation } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function MenuOptions() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
 
   const { user } = useSelector((state) => ({
-    user: state.user,
+    user: state.user.data,
   }));
 
   const handleClose = (local) => {
-    history.push(local);
+    if(!user.id){
+      history.push('/login');
+    } else {
+      history.push(local);
+    }
     setAnchorEl(null);
   };
 
@@ -26,16 +31,20 @@ export default function MenuOptions() {
     }
   };
 
+  const getNameInitials = () => {
+    return user.name?.split(" ").reduce((a, v) => {return a + v.slice(0,1)}, "") || "SN"
+  }
+
   return (
     <div>
-      <Button
+      <Avatar
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={handleClick}
-        style={{ width: 50, height: 50, borderRadius: 25 }}
+        style={{ marginLeft: '1rem', width: 50, height: 50, cursor: "pointer" }}
       >
-        <img alt="pic" src="https://static.thenounproject.com/png/630740-200.png" style={{ width: 50, height: 50, borderRadius: 25 }} />
-      </Button>
+        {getNameInitials()}
+      </Avatar>
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}

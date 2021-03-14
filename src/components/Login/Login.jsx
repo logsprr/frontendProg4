@@ -34,7 +34,7 @@ const Login = ({ }) => {
       setLoading(false);
       if (response.status === 200) {
         loadUser(response.data);
-        history.push('/products');
+        history.push('/');
       }
     } catch (error) {
       setLoading(false);
