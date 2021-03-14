@@ -6,7 +6,7 @@ class SellerService {
   }
 
   save(data) {
-    return api.post('/products', data);
+    return api.post('/sells', data);
   }
 
   getAll(id) {

@@ -17,7 +17,7 @@ const Cart = ({ cart, totalPrice }) => {
   const { userState } = useSelector((state) => ({
     userState: state.user,
   }));
-  const removeProducts = () => {
+  const clearCart = () => {
     dispatch({ type: ListTypesRequest.LOAD_CLEAN });
   };
 
@@ -28,28 +28,23 @@ const Cart = ({ cart, totalPrice }) => {
   );
 
   const purchaseProducts = async () => {
-    if (userState) {
+    if (userState.data.id) {
       const data = {
-        sellProducts: [
-          {
-            id: '6003ac0eccfecf0f6a6205fd',
-            name: 'teste 2',
-            vUnCom: 2.59,
-            qCom: 3,
-            vProd: 6.77,
-          },
-        ],
+        sellProducts: cart,
         seller: {
-          id: '6002e834b4360726fdbba754',
+          id: cart[0].seller.id,
         },
         customer: {
-          id: '6003aff3ccfecf0f6a620607',
+          id: userState.data.id,
         },
         number: 1,
-        vTotal: 6.77,
+        vTotal: totalPrice,
       };
       const response = await new SellerService().save(data);
-      console.log(response);
+      if(response.status == 200){
+        clearCart()
+        history.push('/');
+      }
     } else {
       history.push('/login');
     }
@@ -81,7 +76,7 @@ const Cart = ({ cart, totalPrice }) => {
             type="button"
             variant="contained"
             color="secondary"
-            onClick={() => removeProducts()}
+            onClick={() => clearCart()}
           >Limpar Carrinho
           </Button>
         </div>

@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navbar, Products, Cart, NewProduct, Login, Create, Sells } from './components';
 import ProductsService from './services/Products';
 import { addProduct, loadAllProducts, loadFailedProducts } from './store/actions/Products';
-import SellerService from './services/SellerService';
-import { loadAllSells, loadFailedSells } from './store/actions/Sell';
 
 const App = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -28,16 +26,6 @@ const App = () => {
     }
   };
 
-  const fetchSells = async () => {
-    const { data, status } = await new SellerService().getAll(userState.data.id);
-    console.log(data, status);
-    if (status === 200) {
-      dispatch(loadAllSells(data));
-    } else {
-      dispatch(loadFailedSells());
-    }
-  };
-
   const handleAddToCart = async (product, quantity) => {
     for (const key in productsState.dataCart) {
       if (productsState.dataCart[key].id == product.id) {
@@ -53,13 +41,13 @@ const App = () => {
       picture: product.picture,
       qtd: 1,
       priceTotal: product.vUnCom,
+      seller: { id: product.seller.id }
     };
     dispatch(addProduct(newProduct));
   };
 
   useEffect(() => {
     fetchProducts();
-    fetchSells();
   }, [value]);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
