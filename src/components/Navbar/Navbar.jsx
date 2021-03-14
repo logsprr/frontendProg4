@@ -43,7 +43,7 @@ const PrimarySearchAppBar = ({ totalItems }) => {
       setLoading(false);
     } else {
       const { data, status } = await new ProductsService().getAll();
-      const newArray = await data.filter((item) => item.name.includes(filter));
+      const newArray = await data.filter((item) => item.name?.includes(filter));
       if (status === 200) {
         dispatch(loadAllProducts(newArray));
       } else {
