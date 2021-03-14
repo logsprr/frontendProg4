@@ -1,13 +1,16 @@
 import React from 'react';
+import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { clearUser } from '../../store/actions/User'
+
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { useHistory, useLocation } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function MenuOptions() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const { user } = useSelector((state) => ({
@@ -15,16 +18,16 @@ export default function MenuOptions() {
   }));
 
   const handleClose = (local) => {
-    if(!user.id){
-      history.push('/login');
-    } else {
-      history.push(local);
+    if(local === "/"){
+      dispatch(clearUser())
     }
     setAnchorEl(null);
+    history.push(local);
   };
 
   const handleClick = (event) => {
-    if (user) {
+    console.log(user);
+    if (user.id) {
       setAnchorEl(event.currentTarget);
     } else {
       handleClose('/login');

@@ -36,7 +36,7 @@ const Create = ({ }) => {
         console.log(response);
         setLoading(false);
         loadUser(response.data);
-        history.push('/products');
+        history.push('/');
       } catch (err) {
         setLoading(false);
       }

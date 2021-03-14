@@ -10,6 +10,8 @@ import { loadAllSells, loadFailedSells } from './store/actions/Sell';
 
 const App = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [value, setValue] = useState(null);
+
   const dispatch = useDispatch();
   const { productsState, userState, sellsState, state } = useSelector((state) => ({
     productsState: state.products,
@@ -58,7 +60,7 @@ const App = () => {
   useEffect(() => {
     fetchProducts();
     fetchSells();
-  }, []);
+  }, [value]);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
@@ -84,7 +86,7 @@ const App = () => {
             <Cart cart={productsState.dataCart} totalPrice={productsState.totalPrice} />
           </Route>
           <Route path="/new-product" exact>
-            <NewProduct />
+            <NewProduct onPost={setValue} />
           </Route>
         </Switch>
       </div>

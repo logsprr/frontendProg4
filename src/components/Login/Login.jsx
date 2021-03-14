@@ -3,6 +3,8 @@ import { CssBaseline, Paper, Stepper, Step, StepLabel, Typography, CircularProgr
 import { Link, useHistory } from 'react-router-dom';
 
 import { useForm, FormProvider } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+
 import LinearProgress from '@material-ui/core/LinearProgress';
 import useStyles from './styles';
 import FormInput from '../NewProduct/CustomTextField/CustomTextField';
@@ -20,6 +22,7 @@ const Login = ({ }) => {
   const methods = useForm();
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const dispatch = useDispatch()
 
   const test = (data) => {
     setShippingData(data);
@@ -33,7 +36,7 @@ const Login = ({ }) => {
       const response = await new UserService().login(data);
       setLoading(false);
       if (response.status === 200) {
-        loadUser(response.data);
+        dispatch(loadUser(response.data));
         history.push('/');
       }
     } catch (error) {

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { InputLabel, Select, MenuItem, Button, Grid, Typography } from '@material-ui/core';
+import React from 'react';
+import { Button, Grid, Typography } from '@material-ui/core';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import FormInput from '../CustomTextField/CustomTextField';
 import ProductsService from '../../../services/Products';
 
-const AddressForm = ({ nextStep }) => {
+const ProductForm = ({ nextStep }) => {
   const methods = useForm();
 
   const { user } = useSelector((state) => ({
@@ -43,4 +43,4 @@ const AddressForm = ({ nextStep }) => {
   );
 };
 
-export default AddressForm;
+export default ProductForm;

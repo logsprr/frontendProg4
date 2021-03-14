@@ -2,20 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { CssBaseline, Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { DropzoneArea } from 'material-ui-dropzone';
 import firebase from 'firebase';
-import AddressForm from './AddressForm/AddressForm';
+import ProductForm from './ProductForm/ProductForm';
 import PaymentForm from './PaymentForm/PaymentForm';
 import useStyles from './styles';
 import ProductsService from '../../services/Products';
 
 const steps = ['Dados', 'Imagem'];
 
-const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
+const Checkout = ({ cart, onCaptureCheckout, order, error, onPost }) => {
+  const [loading, setLoading] = useState(false);
   const [checkoutToken, setCheckoutToken] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   const [productId, setProductId] = useState('');
   const [shippingData, setShippingData] = useState({});
+
   const classes = useStyles();
   const history = useHistory();
 
@@ -61,26 +64,32 @@ const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
     if (files.length > 0) {
       const file = files[0];
       const storageRef = firebase.storage().ref(`img/${file.name}`);
+      setLoading(true)
       const task = storageRef.put(file);
       task.then(() => {
         task.snapshot.ref.getDownloadURL().then(async (url) => {
-          const response = await new ProductsService().updatePicture(url, productId);
+          await new ProductsService().updatePicture(url, productId);
+          setLoading(false)
+          onPost(true)
           history.push("/");
         });
       });
     }
   };
   const Form = () => (activeStep === 0
-    ? <AddressForm checkoutToken={checkoutToken} nextStep={nextStep} setShippingData={setShippingData} test={test} />
+    ? <ProductForm checkoutToken={checkoutToken} nextStep={nextStep} setShippingData={setShippingData} test={test} />
     : <PaymentForm checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep} shippingData={shippingData} onCaptureCheckout={onCaptureCheckout} />);
 
   const Drop = () => (
-    <DropzoneArea
-      onChange={handleChange}
-      acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
-      filesLimit={1}
-      dropzoneText="Arraste ou selecione um arquivo"
-    />
+    <>
+      <DropzoneArea
+        onChange={handleChange}
+        acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+        filesLimit={1}
+        dropzoneText="Arraste ou selecione um arquivo"
+      />
+      {loading && <LinearProgress style={{ marginTop: 10 }} />}
+    </>
   );
   return (
     <>
