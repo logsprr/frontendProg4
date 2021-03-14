@@ -65,7 +65,7 @@ const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
       task.then(() => {
         task.snapshot.ref.getDownloadURL().then(async (url) => {
           const response = await new ProductsService().updatePicture(url, productId);
-          console.log(response);
+          history.push("/");
         });
       });
     }
