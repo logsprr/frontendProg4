@@ -1,21 +1,23 @@
 import React from 'react';
-import { Card, CardMedia, CardContent, CardActions, Typography, IconButton } from '@material-ui/core';
-import { AddShoppingCart } from '@material-ui/icons';
+import { Card, CardMedia, CardContent, Typography } from '@material-ui/core';
 
 import useStyles from './styles';
 
-const Product = ({ product, onAddToCart }) => {
+const Product = ({ product }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', padding: 10 }}>
-        {product.sellProducts.map((item) => (
+        {product.sellProducts.map((item, index) => (
+          <div>{index < 3 && (
           <CardMedia
             className={classes.media}
             image={item.picture ? item.picture : 'http://anest-iwata.com.br/wp-content/uploads/2016/10/Sem-imagem.png'}
             title={item.name}
           />
+          )}
+          </div>
         ))}
       </div>
       <CardContent>

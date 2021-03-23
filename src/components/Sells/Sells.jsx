@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 
+import { useDispatch, useSelector } from 'react-redux';
 import Product from './Product/Product';
 import useStyles from './styles';
 
-import { useDispatch, useSelector } from 'react-redux';
 import SellerService from '../../services/SellerService';
 import { loadAllSells, loadFailedSells } from '../../store/actions/Sell';
 
@@ -14,7 +14,7 @@ const Sells = ({ onAddToCart }) => {
   const dispatch = useDispatch();
   const { userState, sellsState } = useSelector((state) => ({
     userState: state.user,
-    sellsState: state.sells.dataSells
+    sellsState: state.sells.dataSells,
   }));
 
   const fetchSells = async () => {
@@ -26,12 +26,9 @@ const Sells = ({ onAddToCart }) => {
     }
   };
 
-
   useEffect(() => {
     fetchSells();
   }, []);
-
-  console.log(sellsState);
 
   if (!sellsState.length) return <p>Loading...</p>;
 

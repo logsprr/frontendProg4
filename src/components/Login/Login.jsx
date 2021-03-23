@@ -22,7 +22,7 @@ const Login = ({ }) => {
   const methods = useForm();
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const test = (data) => {
     setShippingData(data);
